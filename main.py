@@ -42,7 +42,7 @@ Base.metadata.create_all(bind=engine)
 # OPENAI CLIENT (HARDCODED API KEY)
 # ---------------------------------------------------------------------
 client = OpenAI(
-    api_key=""
+    api_key="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"
 )
 
 translator = Translator()
