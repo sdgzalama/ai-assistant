@@ -1,10 +1,28 @@
+
+
+import os
+
+# REPLACE with your NEW API key
+
 from openai import OpenAI
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key="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"
-)
-r = client.chat.completions.create(
-    model="openai/gpt-3.5-turbo",
-    messages=[{"role":"user","content":"Hello, are you working?"}]
-)
-print(r.choices[0].message.content)
+import os
+
+# REPLACE with your NEW API key
+os.environ["OPENAI_API_KEY"] = "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"
+
+
+client = OpenAI()
+
+try:
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "user", "content": "How are you?"}
+        ]
+    )
+
+    print("API responded successfully!")
+    print("Response:", response.choices[0].message.content)
+
+except Exception as e:
+    print("API key error or request failed:", e)
