@@ -1,28 +1,23 @@
+import requests
+import json
 
+API_KEY = "sk-fdbbc01319c74effbca6cb4c40215e10"   # <-- paste your key here
 
-import os
+url = "https://api.deepseek.com/chat/completions"
 
-# REPLACE with your NEW API key
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {API_KEY}"
+}
 
-from openai import OpenAI
-import os
+payload = {
+    "model": "deepseek-chat",
+    "messages": [
+        {"role": "user", "content": "Hello, can you hear me?"}
+    ]
+}
 
-# REPLACE with your NEW API key
-os.environ["OPENAI_API_KEY"] = "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"
+response = requests.post(url, headers=headers, data=json.dumps(payload))
 
-
-client = OpenAI()
-
-try:
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "user", "content": "How are you?"}
-        ]
-    )
-
-    print("API responded successfully!")
-    print("Response:", response.choices[0].message.content)
-
-except Exception as e:
-    print("API key error or request failed:", e)
+print("Status Code:", response.status_code)
+print("Response:\n", response.text)
