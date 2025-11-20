@@ -251,6 +251,26 @@ class MediaLawQuery(BaseModel):
     law_type: str = "general"
     question: str
 
+@app.post("/webhook/whatsapp")
+async def whatsapp_webhook(payload: dict, db: Session = Depends(get_db)):
+    print("Incoming WhatsApp:", payload)
+
+    if "messages" not in payload:
+        return {"status": "ignored"}
+
+    for msg in payload["messages"]:
+        if msg.get("from") and msg.get("text"):
+            user_number = msg["from"]
+            user_message = msg["text"]["body"]
+
+            # Use your existing chat logic
+            req = ChatRequest(message=user_message, category="general")
+            res = chat_endpoint(req, db)
+
+            # Send reply back to WhatsApp
+            send_whatsapp_message(user_number, res.reply)
+
+    return {"status": "processed"}
 
 @app.post("/media/laws")
 def media_laws_query(query: MediaLawQuery):
@@ -356,6 +376,32 @@ def health_check():
         "deepseek": deepseek_status,
         "timestamp": datetime.utcnow()
     }
+
+# ---------------------------------------------------------
+# WHATSAPP (360DIALOG) INTEGRATION
+# ---------------------------------------------------------
+
+D360_API_KEY = os.getenv("D360_API_KEY")
+WHATSAPP_SENDER = os.getenv("WHATSAPP_SENDER")
+
+def send_whatsapp_message(to_number: str, text: str):
+    """Send message back to user using 360Dialog"""
+    url = "https://waba.360dialog.io/v1/messages"
+    headers = {
+        "D360-API-KEY": D360_API_KEY,
+        "Content-Type": "application/json"
+    }
+    body = {
+        "to": to_number,
+        "type": "text",
+        "text": {"body": text}
+    }
+    try:
+        response = requests.post(url, headers=headers, json=body)
+        print("WhatsApp send response:", response.text)
+    except Exception as e:
+        print("Error sending WhatsApp message:", e)
+
 
 if __name__ == "__main__":
     import uvicorn
