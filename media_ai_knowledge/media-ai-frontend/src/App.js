@@ -8,7 +8,7 @@ function App() {
   const bottomRef = useRef(null);
 
   //DEPLOY BACKEND ON RENDER:
-  const API_BASE = "https://ai-assistant-media-laws.onrender.com/";
+  const API_BASE = "https://ai-assistant-media-laws.onrender.com";
   
   // const API_BASE = "http://localhost:8000";
 
