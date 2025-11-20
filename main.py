@@ -14,7 +14,7 @@ import json
 import requests
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 
 # ---------------------------------------------------------------------
 # FASTAPI APP
@@ -66,7 +66,9 @@ def get_db():
 # DEEPSEEK CLIENT (Environment Variables)
 # ---------------------------------------------------------------------
 # Put your DeepSeek API key here or in .env as DEEPSEEK_API_KEY
-DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY") or "sk-fdbbc01319c74effbca6cb4c40215e10"
+
+load_dotenv()
+DEEPSEEK_API_KEY=os.getenv("DEEPSEEK_API_KEY")
 
 # If no key provided, we fall back to demo mode (client_available False)
 client_available = bool(DEEPSEEK_API_KEY)
